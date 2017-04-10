@@ -8,13 +8,19 @@
 
 import UIKit
 
-class ViewController: UICollectionViewController{
+class ViewController: UIViewController {
 
     fileprivate let cellIdentifier = "cell"
     
+    @IBOutlet var collectionView: UICollectionView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        if let layout = self.collectionView?.collectionViewLayout as? CustomCollectionViewFlowLayout {
+        
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
+        
+        if let layout = collectionView.collectionViewLayout as? CustomCollectionViewFlowLayout {
             layout.sectionInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
             layout.minimumLineSpacing = 8
             layout.minimumInteritemSpacing = 8
@@ -54,15 +60,23 @@ class ViewController: UICollectionViewController{
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
+}
 
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+extension ViewController: UICollectionViewDelegate {
+    
+    
+}
+
+extension ViewController: UICollectionViewDataSource {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         
         // 第1セクションはヘッダー(UIColor.red)
         // 第2セクション以降がメインコンテンツ(UIColor.blue)
         return 3
     }
     
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         
         if section == 0 {
             return 1
@@ -70,8 +84,8 @@ class ViewController: UICollectionViewController{
         return 17
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: cellIdentifier, for: indexPath)
         let mainLabel = UILabel(frame: cell.frame)
         
